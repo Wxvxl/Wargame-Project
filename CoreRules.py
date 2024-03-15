@@ -45,8 +45,8 @@ class Unit:
 
         # EXTRA STATLINES 
         # Statlines that are not available to each unit.
-        self.ward = 0
-        self.invuln = 0
+        self.ward = 0 # An additional save that is made for every point of damage that is dealt.
+        self.invuln = 0 # A save that is made if armor piercing exceeds this value instead of normal save. This value cannot be modified by AP.
     
     def __str__(self) -> str:
         return self.name
