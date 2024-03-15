@@ -1,8 +1,11 @@
 # Demo Sheet for Wargame Project
+# Import the core rules.
 from CombatRound import CombatRound
 from CoreRules import Unit
 from CoreRules import Weapon
 from CoreRules import Ability
+
+# Import factions used.
 from Factions.Hosts_of_Heavens import Liberator
 
 class DummyEnemy(Unit):
