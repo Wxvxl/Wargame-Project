@@ -88,11 +88,14 @@ def CombatRound(A, B): # A and B represents two sides.
             
             # Roll the saving throws and remove all of the saved wounds.
             print(f"{target} needs {SvTarget}+ to successfully save a wound!")
-            wound_rolls = [roll for roll in wound_rolls if roll < SvTarget]
+            Sv_rolls = []
+            for i in range(len(wound_rolls)):
+                Sv_rolls.append(r.randint(1,6))
+            Sv_rolls = [roll for roll in Sv_rolls if roll < SvTarget]
 
             # count the total damage dealt.
-            damage = (len(wound_rolls)) * weapon.D
-            print(f"{target} has {len(wound_rolls)} unsaved wounds, receiving {damage} damage!")
+            damage = (len(Sv_rolls)) * weapon.D
+            print(f"{target} has {len(Sv_rolls)} unsaved wounds, receiving {damage} damage!")
 
             # counts the amount of casualties that the target unit suffers!
             casualties = damage // target.W
