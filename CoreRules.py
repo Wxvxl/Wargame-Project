@@ -42,6 +42,11 @@ class Unit:
         self.tags = [] # Tags associated with the unit, keywords, whether its reinforced,
         self.statuseffects = [] # Status effects applied to the unit. 
         # TODO: Create status effects class.
+
+        # EXTRA STATLINES 
+        # Statlines that are not available to each unit.
+        self.ward = 0
+        self.invuln = 0
     
     def __str__(self) -> str:
         return self.name
