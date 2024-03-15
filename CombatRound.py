@@ -1,6 +1,51 @@
 import random as r
 
 # Initialize and process combat between units.
+def InflictWounds(fighter, weapon, target, wounds):
+      # Units now make their saving throws.
+            print(f"{target} rolling for saving throws")
+            print(f"{target} has a {target.Sv}+ save, reduced by {fighter}'s {weapon} with AP{weapon.AP}")
+
+            # Modifies the save by the weapon AP value.
+            SvTarget = target.Sv - weapon.AP
+            
+            # Roll the saving throws and remove all of the saved wounds.
+            print(f"{target} needs {SvTarget}+ to successfully save a wound!")
+            Sv_rolls = []
+            for i in range(wounds):
+                Sv_rolls.append(r.randint(1,6))
+            Sv_rolls = [roll for roll in Sv_rolls if roll <= SvTarget]
+
+            # count the total damage dealt.
+            damage = (len(Sv_rolls)) * weapon.D
+            print(f"{target} has {len(Sv_rolls)} unsaved wounds, receiving {damage} damage!")
+
+            # process ward saves
+            # extra saves that is made.
+            if target.ward != 0:
+                ward_rolls = []
+                for i in range(damage * weapon.D):
+                    ward_rolls.append(r.randint(1,6))
+                ward_rolls = [roll for roll in ward_rolls if roll >= target.ward]
+
+                if len(ward_rolls) != 0:
+                    print(f"{target} saved {len(ward_rolls)} damage from Ward")
+                    damage -= len(ward_rolls)
+                else: print(f"{target} did not save any wounds through ward.")
+
+            # counts the amount of casualties that the target unit suffers!
+            casualties = damage // target.W
+            if casualties != 0:
+                print(f"{target} suffers {casualties} casualties")
+            
+            # Wounds unit that took damage, but did not die.
+            unallocated_damage = damage - (casualties * target.W)
+            if unallocated_damage != 0:
+                print(f"A {str(target)[:-1]} is wounded but not slain after suffering {unallocated_damage} damage")
+                target.CW = unallocated_damage
+            print()
+            return target
+
 def CombatRound(A, B): # A and B represents two sides.
     # Fighters are grouped into one list with all of the fighter.
     Fighters = []
@@ -79,49 +124,7 @@ def CombatRound(A, B): # A and B represents two sides.
             print(f"Successful wounds for {fighter} against {target}: {wound_rolls}")
             print()
 
-            # Units now make their saving throws.
-            print(f"{target} rolling for saving throws")
-            print(f"{target} has a {target.Sv}+ save, reduced by {fighter}'s {weapon} with AP{weapon.AP}")
-
-            # Modifies the save by the weapon AP value.
-            SvTarget = target.Sv - weapon.AP
-            
-            # Roll the saving throws and remove all of the saved wounds.
-            print(f"{target} needs {SvTarget}+ to successfully save a wound!")
-            Sv_rolls = []
-            for i in range(len(wound_rolls)):
-                Sv_rolls.append(r.randint(1,6))
-            Sv_rolls = [roll for roll in Sv_rolls if roll <= SvTarget]
-
-            # count the total damage dealt.
-            damage = (len(Sv_rolls)) * weapon.D
-            print(f"{target} has {len(Sv_rolls)} unsaved wounds, receiving {damage} damage!")
-
-            # process ward saves
-            # extra saves that is made.
-            if target.ward != 0:
-                ward_rolls = []
-                for i in range(damage * weapon.D):
-                    ward_rolls.append(r.randint(1,6))
-                ward_rolls = [roll for roll in ward_rolls if roll >= target.ward]
-
-                if len(ward_rolls) != 0:
-                    print(f"{target} saved {len(ward_rolls)} damage from Ward")
-                    damage -= len(ward_rolls)
-                else: print(f"{target} did not save any wounds through ward.")
-
-            # counts the amount of casualties that the target unit suffers!
-            casualties = damage // target.W
-            if casualties != 0:
-                print(f"{target} suffers {casualties} casualties")
-            
-            # Wounds unit that took damage, but did not die.
-            unallocated_damage = damage - (casualties * target.W)
-            if unallocated_damage != 0:
-                print(f"A {str(target)[:-1]} is wounded but not slain after suffering {unallocated_damage} damage")
-                target.CW = unallocated_damage
-            print()
-
+            target = InflictWounds(fighter, weapon, target, len(wound_rolls))
 
 
                 

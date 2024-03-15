@@ -18,7 +18,7 @@ class Ability:
         self.name = name 
         self.description = description
         self.type = type # The ability type, this is used to check when the ability would fire off.
-        # Current list of types: "Passive", "CombatStart", "CombatEnd", "OnKill", "OnCasualty", "OnDeath"
+        # Current list of types: "Passive", "CombatStart", "CombatEnd", "OnKill", "OnCasualty", "OnDeath", "OnInit"
     
 class Unit:
     def __init__(self, name, M, WS, BS, T, W, I, LD, Sv, Count, Tags):
