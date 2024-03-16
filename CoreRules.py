@@ -82,6 +82,7 @@ def display_stats(self):
 
 def InflictCasualties(target, damage):
     # counts the amount of casualties that the target unit suffers!
+    casualties = 0
     if target.CW != target.W:
         damage -= target.CW
         if damage <= 0:
