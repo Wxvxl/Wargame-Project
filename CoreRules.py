@@ -82,7 +82,13 @@ def display_stats(self):
 
 def InflictCasualties(target, damage):
     # counts the amount of casualties that the target unit suffers!
-    casualties = damage // target.W
+    if target.CW != target.W:
+        damage -= target.CW
+        if damage <= 0:
+            damage = 0
+        casualties += 1
+    
+    casualties += damage // target.W
     if casualties != 0:
         print(f"[{target}] suffers {casualties} casualties")
             
@@ -129,8 +135,6 @@ def InflictWounds(fighter, weapon, target, wounds):
         else: print(f"[{target}] did not save any wounds through Ward.")
         print()
     return damage
-    
-    
 
 def InflictMortalWounds(target, MW):
     if target.ward != 0:
