@@ -16,10 +16,10 @@ class Weapon:
         return self.name
 
 class Ability:
-    def __init__(self, name, description, type):
+    def __init__(self, name, description, ability_type):
         self.name = name 
         self.description = description
-        self.type = type # The ability type, this is used to check when the ability would fire off.
+        self.type = ability_type # The ability type, this is used to check when the ability would fire off.
         # Current list of types: "Passive", "CombatStart", "CombatEnd", "OnKill", "OnCasualty", "OnDeath", "OnInit"
     
 class Unit:
@@ -144,10 +144,12 @@ def InflictMortalWounds(target, MW):
             ward_rolls.append(r.randint(1,6))
             ward_rolls = [roll for roll in ward_rolls if roll >= target.ward]
 
-            if len(ward_rolls) != 0:
-                print(f"[{target}] saved {len(ward_rolls)} damage from Ward")
-                damage -= len(ward_rolls)
-            else: print(f"[{target}] did not save any wounds through ward.")
+        if len(ward_rolls) != 0:
+            print(f"[{target}] saved {len(ward_rolls)} damage from Ward")
+            MW -= len(ward_rolls)
+        else: print(f"[{target}] did not save any wounds through ward.")
+    target = InflictCasualties(target, MW)
+    return target
   
 def RollToHit(rolls_count, fighter, weapon, target):
     hit_rolls = []

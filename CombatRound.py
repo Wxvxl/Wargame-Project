@@ -34,6 +34,16 @@ def CombatRound(A, B): # A and B represents two sides.
 
             damage = InflictWounds(fighter, weapon, target, len(wound_rolls))
             target = InflictCasualties(target, damage)
+    
+    for fighter in Combat_Order:
+        for ability in fighter.abilities_list:
+            if ability.type == "CombatEnd":
+                if fighter in A:
+                    ability.CombatEnd(fighter, A, B)
+                else:
+                    ability.CombatEnd(fighter, B, A)
+            
+        
 
 
                 

@@ -11,7 +11,7 @@ from Factions.Hosts_of_Heavens import Liberator
 class DummyEnemy(Unit):
     def __init__(self):
         super().__init__("Wooden Dummy", 0, 3, 0, 3, 1, 0, 100, 5, 10, "Dummies")
-        self.weapon_list.append(Weapon("Spinning Hammer", 3, -2, 5, -2, 1, "-"))
+        self.weapon_list.append(Weapon("Spinning Hammer", 3, -2, 4, -1, 1, "-"))
     
 Johns = Liberator()
 Dummys = DummyEnemy()
