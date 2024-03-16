@@ -17,6 +17,7 @@ def CombatRound(A, B): # A and B represents two sides.
     print("Order of Battle:")
     for i,fighter in enumerate(Combat_Order):
         print(f"{i+1}. [{fighter}] at initiative {fighter.I}")
+    input("Press enter to continue")
     print()
 
     # Attacking fighter selects a random enemy target to fight.
@@ -42,6 +43,8 @@ def CombatRound(A, B): # A and B represents two sides.
                     ability.CombatEnd(fighter, A, B)
                 else:
                     ability.CombatEnd(fighter, B, A)
+                input("Press enter to continue")
+                print()
             
         
 

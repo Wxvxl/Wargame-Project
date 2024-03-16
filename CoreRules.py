@@ -114,12 +114,14 @@ def InflictWounds(fighter, weapon, target, wounds):
       # Units now make their saving throws.
     print(f"[{target}] rolling for saving throws")
     print(f"[{target}] has a {target.Sv}+ save, reduced by [{fighter}]'s [{weapon}] with AP{weapon.AP}")     
-
+    
     # Modifies the save by the weapon AP value.
     SvTarget = target.Sv - weapon.AP
     
     # Roll the saving throws and remove all of the saved wounds.
     print(f"[{target}] needs {SvTarget}+ to successfully save a wound!")
+    input("Press enter to continue")
+    print()
     Sv_rolls = []
     for i in range(wounds):
         Sv_rolls.append(r.randint(1,6))
@@ -135,6 +137,8 @@ def InflictWounds(fighter, weapon, target, wounds):
     # extra saves that is made.
     if target.ward != 0:
         print(f"[{target}] has a Ward save of {target.ward}+!")
+        input("Press enter to continue")
+        print()
         ward_rolls = []
         for i in range(damage * weapon.D):
             ward_rolls.append(r.randint(1,6))
@@ -184,7 +188,8 @@ def RollToHit(rolls_count, fighter, weapon, target):
     print(f"[{fighter}] attacking using [{weapon}] with WS {fighter.WS + weapon.HM}")
     print(f"[{target}] defending using [{target.weapon_list[0]}] with WS {target.WS + target.weapon_list[0].HM}")
     print(f"Roll needed to hit: {hitTarget}+")
-            
+    input("Press enter to continue")
+    print()
     # Remove all of the hit roll that does does not meet the hit criteria.
     hit_rolls = [roll for roll in hit_rolls if roll >= hitTarget]
     if len(hit_rolls) != 0:
@@ -208,9 +213,11 @@ def RollToWound(fighter, target, weapon, hit_rolls):
     elif (weapon.S) <= (target.T) * 2:
         hitTarget = 6 # If strength lower than double of toughness, wounding on 6+!
     if (weapon.S) == (target.T): hitTarget = 4
-    
+
     # Rolls the wound roll, works the same way as hit roll.
     print(f"roll needed to successfully wound: {hitTarget}+")
+    input("Press enter to continue")
+    print()
     for i in range(len(hit_rolls)):
         wound_rolls.append(r.randint(1,6))
     wound_rolls = [roll for roll in wound_rolls if roll >= hitTarget]
