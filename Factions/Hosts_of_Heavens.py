@@ -9,10 +9,11 @@ import random as r
 
 # Battleline
 
-# Liberator - Core battleline faction, the basic warrior wielding hammers and shield to smite the forces of darkness.
+# Liberator - Core battleline of the faction, the basic warrior wielding one handed weapon such as swords and hammers and shield to smite the forces of darkness.
+# They fight with vigor that assaults their enemies relentlessly.
 class Liberator(Unit):
     def __init__(self):
-        super().__init__("Lightborn Liberators",4,4,4,4,4,4,8,4,5,["HoH"])
+        super().__init__("Lightborn Liberators",4,4,4,4,2,4,8,4,5,["HoH"])
         self.weapon_list.append(Weapon("Heavencrafted Weapon", 2, 0, 4, -1, 1,["-"],))
     
         # Initializes the ability of the unit.
@@ -31,7 +32,7 @@ class Liberator(Unit):
             def CombatEnd(self,F,A,E):
                 target = r.choice(E)
                 damage = r.randint(1,3)
-                print(f"The Lightborn Liberators continues their zealous, inflicting {damage} mortal wounds to {target}")
+                print(f"The [Lightborn Liberators] continues their zealous onslaught!, inflicting {damage} mortal wounds to [{target}]")
                 target = InflictMortalWounds(target, damage)
                 return target
         
