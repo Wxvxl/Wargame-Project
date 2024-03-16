@@ -2,6 +2,7 @@ import random as r
 from CoreRules import InflictWounds
 from CoreRules import RollToHit
 from CoreRules import RollToWound
+from CoreRules import InflictCasualties
 # Initialize and process combat between units.
 
 def CombatRound(A, B): # A and B represents two sides.
@@ -13,8 +14,9 @@ def CombatRound(A, B): # A and B represents two sides.
     # Sort the fighter by the initiative, then print the combat order. 
     Combat_Order = sorted(Fighters, key=lambda x: x.I, reverse=True)
     print("Combat Begins!")
+    print("Order of Battle:")
     for i,fighter in enumerate(Combat_Order):
-        print(f"{i+1}. {fighter} at initiative {fighter.I}")
+        print(f"{i+1}. [{fighter}] at initiative {fighter.I}")
     print()
 
     # Attacking fighter selects a random enemy target to fight.
@@ -30,7 +32,8 @@ def CombatRound(A, B): # A and B represents two sides.
             hit_rolls = RollToHit(rolls_count, fighter, weapon, target)
             wound_rolls = RollToWound(fighter,target,weapon,hit_rolls)
 
-            target = InflictWounds(fighter, weapon, target, len(wound_rolls))
+            damage = InflictWounds(fighter, weapon, target, len(wound_rolls))
+            target = InflictCasualties(target, damage)
 
 
                 
