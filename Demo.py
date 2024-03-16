@@ -14,6 +14,6 @@ class DummyEnemy(Unit):
         self.weapon_list.append(Weapon("Spinning Hammer", 3, -2, 4, -1, 1, "-"))
     
 Johns = Liberator()
-Dummys = DummyEnemy()
+EvilJohn = Liberator()
 
-CombatRound([Johns], [Dummys])
+CombatRound([Johns], [EvilJohn])

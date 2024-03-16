@@ -83,22 +83,31 @@ def display_stats(self):
 def InflictCasualties(target, damage):
     # counts the amount of casualties that the target unit suffers!
     casualties = 0
+    pre_casualties = 0
+    
+    if damage == 0:
+        print()
+        return target
+    
     if target.CW != target.W:
         damage -= target.CW
         if damage <= 0:
             damage = 0
-        casualties += 1
+        pre_casualties += 1
     
     casualties += damage // target.W
-    if casualties != 0:
-        print(f"[{target}] suffers {casualties} casualties")
+    if casualties != 0 or pre_casualties != 0:
+        target.curcount -= casualties + pre_casualties
+        if target.curcount <= 0: target.curcount = 0 
+        print(f"[{target}] suffers {casualties + pre_casualties} casualties")
+        print(f"[{target}] only has {target.curcount} model(s) left!")
             
      # Wounds unit that took damage, but did not die.
     unallocated_damage = damage - (casualties * target.W)
     if unallocated_damage != 0:
         print(f"A [{str(target)[:-1]}] is wounded but not slain after suffering {unallocated_damage} damage")
         target.CW = unallocated_damage
-        print()
+    print()
     return target
 
 def InflictWounds(fighter, weapon, target, wounds):
@@ -139,14 +148,18 @@ def InflictWounds(fighter, weapon, target, wounds):
 
 def InflictMortalWounds(target, MW):
     if target.ward != 0:
+        print(f"[{target}] has a Ward save of {target.ward}+!")
         ward_rolls = []
         for i in range(MW):
             ward_rolls.append(r.randint(1,6))
-            ward_rolls = [roll for roll in ward_rolls if roll >= target.ward]
 
+        ward_rolls = [roll for roll in ward_rolls if roll >= target.ward]
+    
         if len(ward_rolls) != 0:
             print(f"[{target}] saved {len(ward_rolls)} damage from Ward")
             MW -= len(ward_rolls)
+            if MW <= 0:
+                MW = 0
         else: print(f"[{target}] did not save any wounds through ward.")
     target = InflictCasualties(target, MW)
     return target
@@ -158,7 +171,6 @@ def RollToHit(rolls_count, fighter, weapon, target):
 
     # set the number you need to score a successful hit.
     # Compare the attacker's WS and the defender's WS.
-    hitTarget = 4 # The default target needed to score a hit.
     if (fighter.WS + weapon.HM) > 2 * (target.WS + target.weapon_list[0].HM):
         hitTarget = 2 # if attacker WS is more than double of defender WS, hitting on 2+
     elif (fighter.WS + weapon.HM) > (target.WS + target.weapon_list[0].HM):
@@ -167,6 +179,7 @@ def RollToHit(rolls_count, fighter, weapon, target):
         hitTarget = 5 # if defender WS is more than double of attacker WS, hitting on 5+    
     elif ((target.WS + target.weapon_list[0].HM) * 2) + 3 > (fighter.WS + weapon.HM):
         hitTarget = 6 # if defender WS is more than double that of the attacker + 3, then hit on 6+
+    if (fighter.WS + weapon.HM) == (target.WS + target.weapon_list[0].HM): hitTarget = 4
     
     print(f"[{fighter}] attacking using [{weapon}] with WS {fighter.WS + weapon.HM}")
     print(f"[{target}] defending using [{target.weapon_list[0]}] with WS {target.WS + target.weapon_list[0].HM}")
@@ -184,19 +197,17 @@ def RollToHit(rolls_count, fighter, weapon, target):
 def RollToWound(fighter, target, weapon, hit_rolls):
      # rolling to wound, works the same way as rolling to hit except successful wound is dictated by Strength and Toughness.
     wound_rolls = []
-    print(f"[{fighter}] rolling to wound against [{target}] using [{weapon}] with Strength {weapon.S} against [{target}] with Toughness {target.T}")
-    hitTarget = 4 # Default value for wounding
+    print(f"[{fighter}] rolling to wound against [{target}] using [{weapon}] with Strength {weapon.S}")
+    print(f"[{target}] has Toughness {target.T}")
     if (weapon.S) >= 2 * (target.T):
         hitTarget = 2 # if Strength more than or equal to double of target Toughness wounding on 2+
-    
     elif (weapon.S) > (target.T):
-        hitTarget = 3 # if Strength higher than toughness, then wounding on 3+
-    
+        hitTarget = 3 # if Strength higher than toughness, then wounding on 3
     elif (weapon.S) < (target.T):
         hitTarget = 5 # If strength lower than toughness, wounding on 5+
-    
     elif (weapon.S) <= (target.T) * 2:
         hitTarget = 6 # If strength lower than double of toughness, wounding on 6+!
+    if (weapon.S) == (target.T): hitTarget = 4
     
     # Rolls the wound roll, works the same way as hit roll.
     print(f"roll needed to successfully wound: {hitTarget}+")
